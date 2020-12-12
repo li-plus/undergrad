@@ -1,0 +1,402 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+</head>
+
+<body>
+<div class="main">
+    <div class="container">
+        <div class="alert alert-primary" role="alert">
+            This is a primary alert—check it out!
+        </div>
+        <div class="alert alert-secondary" role="alert">
+            This is a secondary alert—check it out!
+        </div>
+        <div class="alert alert-success" role="alert">
+            This is a success alert—check it out!
+        </div>
+        <div class="alert alert-danger" role="alert">
+            This is a danger alert—check it out!
+        </div>
+        <div class="alert alert-warning" role="alert">
+            This is a warning alert—check it out!
+        </div>
+        <div class="alert alert-info" role="alert">
+            This is a info alert—check it out!
+        </div>
+        <div class="alert alert-light" role="alert">
+            This is a light alert—check it out!
+        </div>
+        <div class="alert alert-dark" role="alert">
+            This is a dark alert—check it out!
+        </div>
+    </div>
+
+
+    <button type="button" class="btn btn-primary">Primary</button>
+    <button type="button" class="btn btn-secondary">Secondary</button>
+    <button type="button" class="btn btn-success">Success</button>
+    <button type="button" class="btn btn-danger">Danger</button>
+    <button type="button" class="btn btn-warning">Warning</button>
+    <button type="button" class="btn btn-info">Info</button>
+    <button type="button" class="btn btn-light">Light</button>
+    <button type="button" class="btn btn-dark">Dark</button>
+    <button type="button" class="btn btn-link">Link</button>
+    <div class="container">
+        <form class="form-control">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" class="form-control" id="exampleInputEmail1"
+                       aria-describedby="emailHelp" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never
+                    share your email with anyone else.</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control"
+                       id="exampleInputPassword1" placeholder="Password">
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input"
+                       id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me
+                    out</label>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <form class="form-inline">
+            <div class="form-group mb-2">
+                <label for="staticEmail2" class="sr-only">Email</label>
+                <input type="text" readonly class="form-control-plaintext"
+                       id="staticEmail2" value="email@example.com">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="inputPassword2" class="sr-only">Password</label>
+                <input type="password" class="form-control" id="inputPassword2"
+                       placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Confirm
+                identity
+            </button>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+            <p class="card-text">Some quick example text to build on the card
+                title and make up the bulk of the card's content.</p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes
+                    </button>
+                    <button type="button" class="btn btn-secondary"
+                            data-dismiss="modal">Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="input-group" style="display:block;margin:0 auto;">
+                    <input type="text" class="form-control "
+                           placeholder="Search for...">
+                    <span class="input-group-btn">
+                            <button class="btn btn-info btn-search"
+                                    type="button">百度一下</button>
+                        </span>
+                </div>
+                <!-- /input-group -->
+            </div>
+            <!-- /.col-lg-6 -->
+        </div>
+    </div>
+
+    <div class="container">
+        <form>
+            <div class="form-group row">
+                <label for="staticEmail"
+                       class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control-plaintext"
+                           id="staticEmail" value="email@example.com">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control"
+                           id="inputPassword" placeholder="Password">
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="media">
+        <img class="mr-3" src="..." alt="Generic placeholder image">
+        <div class="media-body">
+            <h5 class="mt-0">Media heading</h5>
+            Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+            scelerisque ante sollicitudin. Cras purus odio, vestibulum in
+            vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi
+            vulputate fringilla. Donec lacinia congue
+            felis in faucibus.
+        </div>
+    </div>
+
+
+    <nav aria-label="...">
+        <ul class="pagination justify-content-center">
+            <li class="page-item disabled">
+                <span class="page-link">Previous</span>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">1</a>
+            </li>
+            <li class="page-item active">
+                    <span class="page-link">
+                        2
+                        <span class="sr-only">(current)</span>
+                    </span>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">3</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+
+    </nav>
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Link</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#"
+                       id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">Action</a>
+                        <a class="dropdown-item" href="#">Another action</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">Something else
+                            here</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search"
+                       placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0"
+                        type="submit">Search
+                </button>
+            </form>
+        </div>
+    </nav>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+
+    <h1>Hello, world!</h1>
+    <h1> {{ hello_world }} </h1>
+    {% if 1 == 1%}
+    <li>
+        true
+    </li>
+    {% else %}
+    <li>
+        false
+    </li>
+    {% endif %} {% for i in num_list %}
+
+    <p>
+        {{ i }}
+    </p>
+    {% endfor %} {% for i in num_list reversed %}
+
+    <p>
+        {{ i }}
+    </p>
+    {% endfor %} {% ifequal user currentuser %}
+    <p>
+        You are the current user
+    </p>
+    {% else %}
+    <p>
+        You aren't the current user
+    </p>
+    {% endifequal %}
+    <a href="http://www.baidu.com">This is a link</a>
+    <br/>
+    <a href="http://www.baidu.com" target="_blank">This is a link open in new
+        window</a>
+
+    <table border="1">
+        <tr>
+            <th>Heading</th>
+            <th>Another Heading</th>
+        </tr>
+        <tr>
+            <td>row 1, cell 1</td>
+            <td>row 1, cell 2</td>
+        </tr>
+        <tr>
+            <td/>
+            <td>row 2, cell 2</td>
+        </tr>
+    </table>
+
+</div>
+</body>
+
+</html>
+
+
+<!DOCTYPE>
+<html>
+
+<head>
+    <title> new document </title>
+    <meta name="generator" content="editplus"/>
+    <meta name="author" content=""/>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <style type="text/css">
+        mark {
+            background: orange;
+            color: black;
+        }
+
+    </style>
+</head>
+
+<body>
+<input type="text" value="test">
+<div id="context">
+    Lorem test ipsum dolor sit āmet, consetetur sadipscing elitr, sed diam
+    nonumy eirmod tempor invidunt ut labore et dolore
+    magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
+    dolores et ea rebum. Stet clita kasd
+    gubergren, one, nò sea takimata 1 sanctus est Lorem ipsum dolor sit amet.
+    Lörem ipsum dolor sit amet, consetetur
+    sadipscing elitr, sed diam lor­em ipsum nonumy eirmod tempor invidunt ut
+    labore et dolore magna aliquyam erat, sed
+    diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet
+    clita kasd gubergren, no sea takimata
+    sanctus est lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
+    consetetur sadipscing elitr, sed diam nonumy
+    eirmod tempor invidunt ut labore et dolore magna aliquyam erat. Lorem ipsum
+    dolor sit amet, consetetur sadipscing
+    elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna
+    aliquyam erat. Lorem ipsum dolor sit amet,
+    consetetur sadipscing elitr, sed diam nonumy. Lore'm ipsu%m dolor sit amet.
+    Lo!rem ipsum. Lorem ipsum dolor sit āmet,
+    test consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut
+    labore et dolore magna aliquyam erat,
+    sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum.
+    Stet clita kasd gubergren, one, nò sea
+    takimata 1 sanctus est Lorem ipsum dolor sit amet. Lörem ipsum dolor sit
+    amet, consetetur sadipscing elitr, sed diam
+    lor­em ipsum nonumy eirmod tempor invidunt ut labore et dolore magna
+    aliquyam erat, sed diam voluptua. At vero eos
+    et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no
+    sea takimata sanctus est lorem ipsum dolor
+    sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+    nonumy eirmod tempor invidunt ut labore
+    et dolore magna aliquyam erat. Lorem ipsum dolor sit amet, consetetur
+    sadipscing elitr, sed diam nonumy eirmod tempor
+    invidunt ut labore et dolore magna aliquyam erat. Lorem ipsum dolor sit
+    amet, consetetur sadipscing elitr, sed diam
+    nonumy. Lore'm ipsu%m dolor sit amet. Lo!rem ipsum.Lorem ipsum dolor sit
+    āmet, consetetur sadipscing elitr, sed diam
+    nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed
+    diam voluptua. At vero eos et accusam
+    et justo duo dolores et ea rebum. Stet clita kasd gubergren, one, nò sea
+    takimata 1 sanctus est Lorem ipsum dolor
+    sit amet. Lörem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+    lor­em ipsum nonumy eirmod tempor invidunt
+    ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
+    accusam et justo duo dolores et ea rebum.
+    Stet clita kasd gubergren, no sea takimata sanctus est lorem ipsum dolor sit
+    amet. Lorem ipsum dolor sit amet, consetetur
+    sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore
+    magna aliquyam erat. Lorem ipsum dolor
+    sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
+    invidunt ut labore et dolore magna aliquyam
+    erat. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+    nonumy. Lore'm ipsu%m dolor sit amet. Lo!rem
+    ipsum.
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/mark.js/7.0.0/jquery.mark.min.js"></script>
+<script type="text/javascript">
+
+        $(function () {
+            $("input").on("input.highlight", function () {
+                // Determine specified search term
+                var searchTerm = $(this).val();
+                // Highlight search term inside a specific context
+                $("#context").unmark().mark(searchTerm);
+            }).trigger("input.highlight").focus();
+        });
+
+
+</script>
+</body>
+
+</html>

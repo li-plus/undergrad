@@ -1,0 +1,38 @@
+
+
+#logo{
+    text-align: center;
+}
+
+#title{
+    text-align: center;
+    font-weight: bold;
+    /*font-family: 'SimHei';*/
+}
+
+#pubtime{
+    text-align: right;
+    color: gray;
+    /*font-weight: bold;*/
+}
+
+p{
+    line-height: 200%;
+    /*font-family:"SimHei";*/
+}
+
+#main{
+    background-color: #fff;
+    border-radius: 20px;
+    /*width: 300px;
+    height: 350px;*/
+    margin: auto;
+    position: absolute;
+    top: 10%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /*left: 50%;
+    top: 50%;*/
+    /*transform: translate(-50%,-50%);*/
+}

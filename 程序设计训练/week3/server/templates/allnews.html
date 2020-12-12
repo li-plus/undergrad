@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/allnews.css">
+</head>
+
+<body>
+<!-- begin navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home/">
+        <img src="/static/img/news_logo.png" width="30" height="30"
+             class="d-inline-block align-top" alt="">News
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/home/">Home</a>
+            </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="/allnews/">All News
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- end navbar -->
+
+<img src="/static/img/news_logo.png" alt="news_logo" id="logo"/>
+<div class="container" id='main'>
+    <br/>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-8">
+            <h1> All News </h1>
+        </div>
+        <div class="col"></div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col" style="text-align: center">
+            <p> We Have {{ total_news_num }} News in Total</p>
+        </div>
+        <div class="col"></div>
+    </div>
+
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-10">
+            <div class="container">
+                <ul class="list-group list-group-flush">
+                    {% for news_block in news_blocks %}
+                    <li class="list-group-item">
+                        <a href="{{ news_block.url }}" target="_blank">
+
+                                <span class="float-left">
+                                    {{ news_block.title }}
+                                </span>
+                            <span class="float-right">
+                                    {{ news_block.pubtime }}
+                                </span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="col"></div>
+    </div>
+    <!-- begin pagination -->
+    <div class="row">
+        <div class="col"></div>
+        <div class="col">
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item disabled">
+                        <span class="page-link">Prev</span>
+                    </li>
+                    {% for page in pages %} {% if page.is_current %}
+                    <li class="page-item active">
+                            <span class="page-link">
+                                {{ page.num }}
+                                <span class="sr-only">(current)</span>
+                            </span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/allnews/?page={{ page.num }}"> {{ page.num
+                            }} </a>
+                    </li>
+                    {% endif %} {% endfor %}
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="col"></div>
+    </div>
+</div>
+
+<hr/>
+
+
+<br/>
+<br/>
+<!-- end pagination -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="/static/mark.js/dist/jquery.mark.min.js"></script>
+
+<script type="text/javascript">
+        $(function highlight() {
+            // Determine specified search term
+            // Highlight search term inside a specific context
+
+            $("#main").unmark().mark('{{ keyword_str }}');
+        });
+
+</script>
+</body>
+
+</html>

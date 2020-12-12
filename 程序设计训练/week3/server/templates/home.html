@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/home.css">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home/">
+        <img src="/static/img/news_logo.png" width="30" height="30"
+             class="d-inline-block align-top" alt=""> News
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link active" href="/home/">Home
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/allnews/">All News</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="container" id="main">
+    <!--begin search widget-->
+    <div class="container">
+        <form action="/search/" method="get">
+            <div class="row">
+                <div class="col"></div>
+                <div class="col">
+                    <img src="/static/img/news_logo.png" alt="news_logo"
+                         id='logo'/>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="row">
+                <div class="col"></div>
+                <div class="col-7">
+                    <input type="text" class="form-control"
+                           placeholder="Search for..." name="q">
+                    <input value="1" name="page" hidden/>
+                </div>
+                <div class="col-1">
+                    <button type="submit" class="btn btn-primary mb-2">Search
+                    </button>
+                </div>
+                <div class="col"></div>
+            </div>
+        </form>
+    </div>
+    <!--end search widget-->
+
+    <!-- begin content-->
+    {% if is_display %} {% for block in news_blocks%}
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">{{ block.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ block.pubtime }}</h6>
+            <p class="card-text">{{ block.paragraph }}</p>
+            <a href="#" class="card-link">Card link</a>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+    {% endfor %} {% endif %}
+</div>
+</body>
+
+</html>

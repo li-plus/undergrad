@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/css/search.css">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/home/">
+        <img src="/static/img/news_logo.png" width="30" height="30"
+             class="d-inline-block align-top" alt="">News
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/home/">Home
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/allnews/">All News</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- image -->
+<img src="/static/img/news_logo.png" alt="news_logo" id="logo"/>
+<!-- image -->
+<div class="container" id='main'>
+    <!--begin search widget-->
+    <div class="container">
+        <form action="/search/" method="get">
+            <div class="row">
+                <div class="col-6">
+                    <input type="text" class="form-control"
+                           placeholder="Search for..." name="q"
+                           value='{{ keyword_str }}'/>
+                    <input value="1" name="page" hidden/>
+                </div>
+                <div class="col-1">
+                    <button id='search' type="submit"
+                            class="btn btn-primary mb-2">Search
+                    </button>
+                </div>
+                <div class="col"></div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p style="color: gray;">Find {{ total_result }} Results in
+                        {{ total_sec }} seconds</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-3">
+                    <span class="label label-default">From Date</span>
+                    <input type="date" class="form-control" placeholder="From"
+                           name="from" value='{{ start }}'/>
+                </div>
+                <div class="col-3">
+                    <span class="label label-default">To Date</span>
+                    <input type="date" class="form-control" placeholder="To"
+                           name="to" value="{{ end }}"/>
+                </div>
+                <div class="col"></div>
+            </div>
+
+        </form>
+    </div>
+
+    <hr/>
+    <!--end search widget-->
+
+    <!-- begin content-->
+    <div id="content">
+        {% if is_display %} {% for block in news_blocks%}
+        <div class="row">
+            <div class="col-9">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <form action="detail/">
+                                <input value="{{ keyword_str }}"
+                                       name="keyword_str" hidden>
+                                <a href="{{ block.url }}" target="_blank">
+                                    {{ block.title }}
+                                </a>
+                            </form>
+                        </h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{
+                            block.pubtime }}</h6>
+                        <p class="card-text">{{ block.content }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        {% endfor %} {% endif %}
+    </div>
+    <hr/>
+    <!-- end content-->
+    <!-- begin pagination -->
+    <div class="row">
+        <div class="col-9">
+            <nav aria-label="...">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/search/?q={{ keyword_str }}&page=1&from={{start}}&to={{end}}">Front</a>
+                    </li>
+                    {% for page in pages%} {% if page.is_current %}
+                    <li class="page-item active">
+                            <span class="page-link">
+                                {{ page.num }}
+                                <a class="sr-only"
+                                   href="/search/?q={{ keyword_str }}&page={{ page.num }}">(current)
+                                </a>
+                            </span>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/search/?q={{ keyword_str }}&page={{ page.num }}&from={{start}}&to={{end}}">
+                            {{ page.num }} </a>
+                    </li>
+                    {% endif %} {% endfor %}
+                    <li class="page-item">
+                        <a class="page-link"
+                           href="/search/?q={{ keyword_str }}&page={{ totalpage }}&from={{start}}&to={{end}}">Back</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <br/>
+    <br/>
+    <!-- end pagination -->
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="/static/mark.js/dist/jquery.mark.min.js"></script>
+
+<script type="text/javascript">
+        $(function highlight() {
+            // Determine specified search term
+            // Highlight search term inside a specific context
+
+            $("#main").unmark().mark('{{ keyword_highlight }}');
+        });
+
+
+
+
+</script>
+</body>
+
+</html>

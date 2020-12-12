@@ -37,16 +37,15 @@ def poisson_solve(src, dst, mask):
 
     # construct vector b
     lap = cv2.Laplacian(src, cv2.CV_32F, borderType=cv2.BORDER_CONSTANT)
-    border_lap = cv2.Laplacian(dst * ~mask, cv2.CV_32F, borderType=cv2.BORDER_CONSTANT)
-    b = (border_lap - lap)[mask]
+    edge_lap = cv2.Laplacian(dst * ~mask, cv2.CV_32F, borderType=cv2.BORDER_CONSTANT)
+    b = (edge_lap - lap)[mask]
 
     # solve Ax = b
     x = linalg.spsolve(A, b)
 
     # merge
     out = dst.copy()
-    for p_idx, p in enumerate(mask_indices):
-        out[p] = x[p_idx]
+    out[mask] = x
 
     out = np.clip(out, 0, 255).astype(np.uint8)
     return out

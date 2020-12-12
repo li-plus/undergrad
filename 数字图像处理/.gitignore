@@ -1,0 +1,21 @@
+# latex
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.synctex.gz
+*.synctex(busy)
+*.out
+
+# ide
+.vscode/
+.idea/
+
+# python
+__pycache__/
+
+# project
+/project1/face_morphing/api_config.json
+/project1/view_morphing/data/shape_predictor_68_face_landmarks.dat

@@ -1,0 +1,265 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{subfigure}
+
+\usepackage{url}
+
+% for plotting 
+\usepackage{caption}
+\usepackage{pgfplots}
+
+% for pseudo code 
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% for reference 
+\usepackage{hyperref}
+\usepackage{cleveref}
+\crefname{equation}{方程}{方程}
+\Crefname{equation}{方程}{方程}
+\crefname{table}{表}{表}
+\Crefname{table}{表}{表}
+\crefname{figure}{图}{图}
+\Crefname{figure}{图}{图}
+
+% for code 
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{inconsolata}
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+
+\lstset {
+    basicstyle=\footnotesize\ttfamily, % basic font setting
+    breaklines=true, 
+    frame=single,     % {single, shadowbox, bottomline}
+    keywordstyle=\color{blue}, 
+    commentstyle=\color{darkgreen},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    % backgroundcolor=\color{black!5}, % set backgroundcolor
+    % numbers=left, 
+    % numberstyle=\consolas,
+}
+
+% Microsoft Word A4 paper default layout 
+\usepackage[a4paper, left=3.18cm, right=3.18cm, top=2.54cm, bottom=2.54cm]{geometry}
+
+\captionsetup[figure]{name={图}}
+\captionsetup[table]{name={表}}
+
+\title{DIP Lab 2: Image Warping}
+\author{2017011620 \quad 计73 \quad 李家昊}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Perspective Warping}
+
+首先展示生成效果，如\Cref{fig:perspective}所示。
+\begin{figure}[H]
+    \centering
+    \subfigure[Source]{
+        \includegraphics[width=0.4\textwidth]{../image/source.jpg}
+    }
+    \subfigure[Target]{
+        \includegraphics[width=0.4\textwidth]{../image/target.jpg}
+    }
+    \subfigure[Output]{
+        \includegraphics[width=0.8\textwidth]{../output/warp_perspective.jpg}
+    }
+    \caption{Perspective Warping}
+    \label{fig:perspective}
+\end{figure}
+
+核心算法如下，首先需要得到变换矩阵，设其为，
+\begin{equation}
+    \boldsymbol{A} = \left(
+    \begin{matrix}
+        a & b & c\\
+        d & e & f\\
+        g & h & i\\
+    \end{matrix}
+    \right)
+\end{equation}
+在原图中找到四点的坐标为$\{(x_k, y_k)\}_{k=1}^4$，在目标图像中找到它们对应的四点的坐标$\{(u_k, v_k)\}_{k=1}^4$，则在齐次坐标下有，
+\begin{equation}
+    \left(
+    \begin{matrix}
+        a & b & c\\
+        d & e & f\\
+        g & h & i\\
+    \end{matrix}
+    \right)
+    \left(
+    \begin{matrix}
+        x_1 & x_2 & x_3 & x_4\\
+        y_1 & y_2 & y_3 & y_4\\
+        1 & 1 & 1 & 1\\
+    \end{matrix}
+    \right)
+    = \left(
+    \begin{matrix}
+        u_1 & u_2 & u_3 & u_4\\
+        v_1 & v_2 & v_3 & v_4\\
+        1 & 1 & 1 & 1\\
+    \end{matrix}
+    \right)
+\end{equation}
+其中两边取转置，即，
+\begin{equation}
+    \left(
+    \begin{matrix}
+        x_1 & y_1 & 1\\
+        x_2 & y_2 & 1\\
+        x_3 & y_3 & 1\\
+        x_4 & y_4 & 1\\
+    \end{matrix}
+    \right)
+    \left(
+    \begin{matrix}
+        a & b & c\\
+        d & e & f\\
+        g & h & i\\
+    \end{matrix}
+    \right)^T
+    = \left(
+    \begin{matrix}
+        u_1 & v_1 & 1\\
+        u_2 & v_2 & 1\\
+        u_3 & v_3 & 1\\
+        u_4 & v_4 & 1\\
+    \end{matrix}
+    \right)
+\end{equation}
+通过解线性方程组即可求出变换矩阵$\boldsymbol{A}$，这样就可以对图像进行变换了。首先求出其逆矩阵$\boldsymbol{A}^{-1}$，然后扫描目标图像的每一个像素位置$(r_d, c_d)$，根据下式，
+\begin{equation}
+    (r_s, c_s, 1)^T = s \cdot \boldsymbol{A}^{-1} (r_d, c_d, 1)^T
+\end{equation}
+求出原图中对应的像素位置$(r_s, c_s)$，其中$s$为齐次坐标的归一系数，得出坐标可能不是整数，则四舍五入到最近的整数格点$(\text{round}(r_s), \text{round}(c_s))$，即最邻近插值，然后直接将原图此坐标下的值拷贝到目标图的对应位置。核心代码如下，
+\begin{lstlisting}[language=Python]
+def get_perspective_transform(src_rect, dst_rect):
+    assert src_rect.shape == (4, 2) and dst_rect.shape == (4, 2)
+    src_rect = np.concatenate([src_rect.astype(np.float32), np.ones((4, 1), dtype=np.float32)], axis=-1)
+    dst_rect = np.concatenate([dst_rect.astype(np.float32), np.ones((4, 1), dtype=np.float32)], axis=-1)
+    matrix, _, _, _ = np.linalg.lstsq(src_rect, dst_rect)
+    return matrix.T
+
+def warp_perspective(src, matrix, dst_size):
+    assert src.ndim == 2 or src.ndim == 3
+    src_h, src_w = src.shape[:2]
+    dst_w, dst_h = dst_size
+    dst_shape = (dst_h, dst_w, src.shape[2]) if src.ndim == 3 else (dst_h, dst_w)
+    dst = np.zeros(dst_shape, dtype=np.uint8)
+    inv = np.linalg.inv(matrix)
+    for dst_y in range(dst_h):
+        for dst_x in range(dst_w):
+            src_x, src_y, src_scale = np.matmul(inv, [dst_x, dst_y, 1])
+            src_x = int(round(src_x / src_scale))
+            src_y = int(round(src_y / src_scale))
+            if 0 <= src_x < src_w and 0 <= src_y < src_h:
+                dst[dst_y, dst_x] = src[src_y, src_x]
+    return dst
+\end{lstlisting}
+
+\section{Sphere Warping}
+
+首先展示结果，如\Cref{fig:sphere}所示。
+\begin{figure}[H]
+    \centering
+    \subfigure[Source]{
+        \includegraphics[height=5.5cm]{../image/warping.png}
+    }
+    \subfigure[Output]{
+        \includegraphics[height=5.5cm]{../output/warp_sphere.jpg}
+    }
+    \caption{Sphere Warping}
+    \label{fig:sphere}
+\end{figure}
+
+核心算法如下，将原图均匀铺在一个水晶球上面，剖面图如\Cref{fig:sphere_alg}所示，
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/sphere.pdf}
+    \caption{Sphere Warping Algorithm}
+    \label{fig:sphere_alg}
+\end{figure}
+设原图的中心为$(r_{s0}, c_{s0})$，目标图的中心为$(r_{d0}, c_{d0})$，水晶球的半径为$l_{d0} = \max(r_{d0}, c_{d0}) / (\pi / 2)$，对于目标图的每个像素$(r_d, c_d)$，首先计算出它到图像中心的距离$l_d= \sqrt{(r_d - r_{d0})^2 + (c_d - c_{d0})^2}$，由几何关系可得，原图对应点距离原图得中心点的距离为，
+\begin{equation}
+    l_s = l_{d0} \cdot \phi = l_{d0} \cdot \arcsin\left(\frac{l_d}{l_{d0}}\right)
+\end{equation}
+由相似三角形关系，可知原图对应点$(r_s, c_s)$满足，
+\begin{equation}
+    (r_s - r_{s0}, c_s - c_{s0}) = \frac{l_s}{l_d} (r_d - r_{d0}, c_d - c_{d0})
+\end{equation}
+这样一来，就可以求出目标图像的每一点对应的原图坐标$(r_s, c_s)$了，同样，如果坐标不为整数，则四舍五入到邻近的整数格点。
+
+核心代码如下，
+\begin{lstlisting}[language=Python]
+def warp_sphere(src, dst_size):
+    assert src.ndim == 2 or src.ndim == 3
+    src_h, src_w = src.shape[:2]
+    dst_w, dst_h = dst_size
+    dst_shape = (dst_h, dst_w, src.shape[2]) if src.ndim == 3 else (dst_h, dst_w)
+    dst = np.zeros(dst_shape, dtype=np.uint8)
+
+    max_dst_radius = min(dst_w, dst_h) // 2
+    dst_center_y, dst_center_x = max_dst_radius, max_dst_radius
+    src_center_y, src_center_x = src_h // 2, src_w // 2
+
+    for dst_y in range(dst_h):
+        for dst_x in range(dst_w):
+            dst_radius = math.sqrt((dst_y - dst_center_y) ** 2 + (dst_x - dst_center_x) ** 2)
+            if dst_radius > max_dst_radius:
+                continue
+            src_radius = max_dst_radius * math.asin(dst_radius / max_dst_radius)
+            scale_factor = src_radius / dst_radius if dst_radius else 1
+            src_y = int(round(scale_factor * (dst_y - dst_center_y) + src_center_y))
+            src_x = int(round(scale_factor * (dst_x - dst_center_x) + src_center_x))
+            if 0 <= src_y < src_h and 0 <= src_x < src_w:
+                dst[dst_y, dst_x] = src[src_y, src_x]
+    return dst
+\end{lstlisting}
+
+\section{Extra Task}
+
+这里做了一个拓展实验，前面的球面形变产生了凸透镜效果，于是我在这里尝试了一下凹透镜效果，如\Cref{fig:sphere_inv}所示，
+\begin{figure}[H]
+    \centering
+    \subfigure[Source]{
+        \includegraphics[height=5.5cm]{../image/warping.png}
+    }
+    \subfigure[Output]{
+        \includegraphics[width=5.5cm]{../output/warp_sphere_inv.jpg}
+    }
+    \caption{Inverse Sphere Warping}
+    \label{fig:sphere_inv}
+\end{figure}
+
+原理是把原图均匀铺在一个锥面上，剖面图如\Cref{fig:sphere_inv_alg}所示，
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{fig/sphere_inv.pdf}
+    \caption{Inverse Sphere Warping Algorithm}
+    \label{fig:sphere_inv_alg}
+\end{figure}
+
+同样设目标图一点$(r_d, c_d)$到中心距离为$l_d$，则原图对应点到中心距离为，
+\begin{equation}
+    l_s = l_{d0} \cdot \phi = l_{d0} \cdot \arccos\left(\frac{l_{d0} - l_d}{l_{d0}}\right)
+\end{equation}
+其余操作同凸透镜效果。核心代码类似，不再赘述，可以参考附录的完整代码。
+
+\section{Appendix: Codes}
+
+附上了完整代码，这里导入的opencv仅仅用来读取和保存图片。
+\lstinputlisting[language=Python]{../warp.py}
+
+\end{document}

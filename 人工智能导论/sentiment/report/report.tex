@@ -1,0 +1,267 @@
+% !TEX program = xelatex
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage{pgfplots}
+\usepackage[a4paper, left=3.18cm, right=3.18cm, top=2.54cm, bottom=2.54cm]{geometry}
+
+\title{人工智能导论 \\ 情感分析实验报告}
+\author{2017011620 计73 李家昊}
+\date{\today}
+
+\begin{document}
+
+\captionsetup[figure]{labelfont={bf}, name={Figure}}
+\captionsetup[table]{labelfont={bf}, name={Table}}
+\maketitle
+
+\section{数据处理}
+
+\subsection{文本处理}
+
+给定的数据集已经完成了分词，因此这里使用keras.preprocessing.text中的Tokenizer工具，统计文本中出现的所有词，按照词频从高到低，为每个词建立一个整数索引，然后将文本转换为整数序列。考虑到CNN模型要求各数据大小一致，这里将每篇文章的长度限制在600个词，对于过长的文章，截取其前600个词，对于过短的文章，则在其后补0，得到文本对应的整数序列，作为神经网络的输入。
+
+\subsection{文本表示方法}
+
+这里采用词向量（word
+embedding）的方式表示文本。考虑到给定的数据集较小，不足以训练出较好的词向量，因此我参考了说明文档提供的预训练词向量下载地址，下载了基于搜狗新闻数据集训练的词向量（300维），将其用到了本次实验的embedding
+layer中，并将其权值标记为non-trainable。
+
+\subsection{标签表示方法}
+
+这里采用分类问题的表示方法，将用户打分最高的类别作为整篇新闻的情感类别。
+
+\subsection{训练集、验证集、测试集的说明}
+
+在给定的训练集中，取16\%作为验证集（共375个样本），其余作为训练集（共1967个样本），给定的测试集（共2228个样本）仅作为最终测试使用，不参与任何训练过程，不发挥任何验证作用。
+
+\section{模型结构}
+
+\subsection{CNN}
+
+这里参考了说明文档提供的Text CNN论文，构建Text
+CNN模型，但模型结构与论文中的略有不同，如下图
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{./model/text_cnn.png}
+\caption{Text CNN Architecture}
+\end{figure}
+
+模型接受一个输入序列，先通过一个embedding layer，将输入序列转换为预训练好的词向量，然后分别用大小为 \(n=1,2,3,4,5\) 的卷积核对词向量做一维卷积，对应基于词的 \(n=1,2,3,4,5\) 元模型，每种大小的卷积核数量为128个，然后通过Max Pooling层，取出卷积的最大值，然后将每个通道内的五个pooling结果连接起来，形成feature map，将其flatten后，以0.5的概率进行dropout，然后用一层全连接层将其连接到输出，采用softmax函数计算出每个类别的预测概率。
+
+\subsection{RNN}
+
+\subsubsection{LSTM}
+
+构建一个简单单向LSTM模型，结构如下图
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.48\textwidth]{./model/text_lstm.png}
+\caption{LSTM Architecture}
+\end{figure}
+
+模型接受一个输入序列，先通过一个embedding layer，将输入序列转换为预训练好的词向量，然后通过一层有64个单元的LSTM层，再以0.5的概率进行dropout，最后用一层全连接层将其连接到输出，采用softmax函数计算出每个类别的预测概率。
+
+\subsubsection{Bidirectional LSTM}
+
+构建一个双向LSTM模型，结构如下图
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{./model/text_bi_lstm.png}
+\caption{Bidirectional LSTM Architecture}
+\end{figure}
+
+模型接受一个输入序列，先通过一个embedding layer，将输入序列转换为预训练好的词向量，然后通过一层有128个单元的双向LSTM层（正向和逆向各64个单元），返回一个时间序列，接下来通过一个time distributed dense层，在时间维度上进行全连接，再通过maxpooling层得到每个通道的最大值，然后flatten降维，以0.5的概率进行dropout，最后用一层全连接层将其连接到输出，采用softmax函数计算出每个类别的预测概率。
+
+\subsection{MLP (Baseline)}
+
+构建多层感知机（MLP）作为baseline，网络结构如下
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.48\textwidth]{./model/text_mlp.png}
+\caption{MLP Architecture}
+\end{figure}
+
+输入序列首先经过embedding层，转化为词向量，然后将其Flatten降维，经过一个全连接层，再以0.5的概率进行dropout，最后用一层全连接层将其连接到输出，采用softmax函数计算出每个类别的预测概率。
+
+\section{实验结果}
+
+训练模型时，采用Adam优化器，取learning rate为0.001，损失函数取为交叉熵。取batch size为256，训练100个epochs。训练过程中，总是保存验证集上loss最小的一个模型，用于最后的测试。
+
+测试模型时，先加载上述方式保存的模型，然后在测试集上测试，最终测试结果如下表所示
+
+\begin{longtable}[H]{llll}
+\toprule
+Model & Accuracy & F1-Score(Macro) & Coef.\tabularnewline
+\midrule
+\endhead
+Text CNN & 62.97\% & 27.03\% & 61.61\%\tabularnewline
+LSTM & 57.09\% & 16.62\% & 52.81\%\tabularnewline
+Bidirectional LSTM & \textbf{63.42\%} & \textbf{31.07}\% & \textbf{62.17\%}\tabularnewline
+MLP & 55.57\% & 17.86\% & 50.56\%\tabularnewline
+\bottomrule
+\caption{Results of implemented models}
+\end{longtable}
+
+特别说明：经统计，在测试集中有234条数据有多个最大标签，占总标签数的10.5\%。因此，在计算上表中的准确率时，只要模型预测出来的类别为最大标签之一时，即判定为预测正确。
+
+此外，按照实验要求，F1-Score需要用Macro Average计算，但是由于数据集的缺陷，某些类别从未被模型预测过，其F1-Score被置为0，拉低了总体的F1-Score。因此，这里的F1-Score不具有参考意义。
+
+\section{调整参数}
+
+本次实验对Text CNN有所创新，受到GoogLeNet中Inception module的
+\(1\times 1\) 卷积核的启发，我也将大小为1的一维卷积核用到了Text
+CNN中，对应于词的一元模型。这么做的原因是，某些词的情感色彩非常明显，只要这些词出现在文章内，基本就可以确定这篇文章的情感类别。
+
+下面进行对照实验，实现Baseline为包含长度为 \(n=2,3,4,5\) 的卷积核的Text CNN，与包含长度为 \(n=1,2,3,4,5\) 的卷积核的Text CNN做对比，在测试集上的测试结果如下
+
+\begin{longtable}[]{llll}
+\toprule
+Model & Accuracy & F1-Score(Macro) & Coef.\tabularnewline
+\midrule
+\endhead
+CNN(with 1-conv) & \textbf{62.97\%} & \textbf{27.03\%} & \textbf{61.61\%}\tabularnewline
+CNN(baseline) & 62.06\% & 25.97\% & 60.21\%\tabularnewline
+\bottomrule
+\caption{Results of 1-conv CNN against baseline}
+\end{longtable}
+
+可见，增加了大小为1的一维卷积核后，准确率上升了约0.9\%，F1-Score与相关系数均有相应提升。
+
+\section{问题思考}
+
+\subsection{停止训练的时机}
+
+我的做法：在训练集上以16\%的比例划分出验证集，训练过程中，总是保存验证集上loss最小的一个模型。然后使模型充分训练，当看到loss明显回升，且不会下降到更低点时，停止训练。然后取保存下来的模型进行测试。
+
+固定迭代次数的方式：优点是方便实现，缺点是不太灵活，需要针对不同的模型选择不同的迭代次数，不能避免过拟合现象，无法预测测试集上的准确率。
+
+通过验证集调整的方式：优点是容易观察到过拟合现象，以及模型的泛化能力，缺点是需要额外消耗计算资源，延长训练时间。
+
+\subsection{参数初始化}
+
+本实验中参数初始化方式是均匀分布初始化（uniform initialization）。初始化参数只要不是太大，一般来说对训练结果影响不大，最终都能收敛到合适的值。
+
+零均值初始化能防止梯度爆炸问题，若初始值均值不为0，则可能产生梯度爆炸问题，导致模型无法训练。
+
+高斯分布初始化能防止梯度消失问题，高斯分布初始化的权重集中在0点附近，多次经过sigmoid激活函数后，仍然能保持相应梯度，防止梯度消失。
+
+正交初始化主要用在RNN的初始化，避免梯度爆炸和梯度消失的问题。
+
+\subsection{防止过拟合的方式}
+
+\begin{itemize}
+    \item 增加 Dropout Layer。
+    \item 增加 L1/L2 Regularization Layer。
+    \item 增加 Batch Normalization Layer。
+\end{itemize}
+
+\subsection{CNN, RNN, MLP优缺点分析}
+
+\subsubsection{CNN}
+
+优点：训练速度快，参数数量少，不容易产生过拟合现象，考虑了上下文信息，大小为 $n$ 的一维卷积核对应了基于词的 $n$ 元模型。
+
+缺点：需要预先确定矩阵的大小，训练期间不能发生变化，因此只能通过截长补短固定文本长度，但可能使长文本的重要信息丢失，无法达到训练效果。
+
+\subsubsection{RNN}
+
+优点：参数数量少，不容易产生过拟合现象，考虑了上下文信息，通过输入门、遗忘门、输出门完成对上下文信息的处理，不需要固定文本长度。
+
+缺点：训练速度慢，实现复杂。
+
+\subsubsection{MLP}
+
+优点：实现简单，训练速度快。
+
+缺点：直接将文本的词向量矩阵降维，会丢失上下文的信息，可能无法达到训练效果。此外，其参数数量较多，容易产生过拟合现象。
+
+\section{对数据集的分析与建议}
+
+本次实验的数据集在数量上和质量上都不尽人意，因此，我想对本实验的数据集提出如下建议：
+
+\begin{itemize}
+
+\item 扩大数据集的规模
+
+    本次实验中，真正能用到训练中的样本仅为2000个左右，训练数据严重不足，非常容易出现过拟合现象。建议将训练集规模增大到10000个样本以上。
+
+\item 提高数据集的标注质量
+
+    我猜想这个数据集是直接从新浪网上用爬虫爬下来的，新浪网上选择情感分类的都是普通网友，并非专门的标注人士，网友的选择随机性很大，而且有些文章仅有几个网友投票，不能代表整篇文章的情感分类。
+
+\item 使类别分配更加平均
+
+    经过统计得出，训练集和测试集上各标签的数量如下图所示
+  
+    \pgfplotstableread[row sep=\\,col sep=&]
+    {
+        interval & train & test \\
+        感动    & 416   & 333   \\
+        同情    & 124   & 101   \\
+        无聊    & 145   & 128   \\
+        愤怒    & 984   & 1064  \\
+        搞笑    & 367   & 348   \\
+        难过    & 180   & 175   \\
+        新奇    & 99    & 68    \\
+        温馨    & 27    & 11    \\
+    }\mydata
+
+    \begin{figure}[H]
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                ybar,
+                bar width=.5cm,
+                width=0.9\textwidth,
+                height=0.6\textwidth,
+                legend style={at={(0.8,1)}, anchor=north, legend columns=-1},
+                symbolic x coords={感动,同情,无聊,愤怒,搞笑,难过,新奇,温馨},
+                xtick=data,
+                nodes near coords,
+                nodes near coords align={vertical},
+                ymin=0, ymax=1200,
+                ylabel={Samples},
+            ]
+            \addplot table[x=interval, y=train]{\mydata};
+            \addplot table[x=interval, y=test]{\mydata};
+            \legend{Train Set, Test Set}
+            \end{axis}
+        \end{tikzpicture}
+        \caption{Summary statistics of train set and test set}
+    \end{figure}
+    
+    其中“愤怒”标签数占总标签数的 44.81\%，而“温馨”只占所有标签的0.83\%，标签分布极不均衡，导致某些类别从未被模型预测过，拉低了总体的F1-Score。
+
+\end{itemize}
+
+若能提升数据集的质量，将进一步提升训练效果，使训练结果更有说服力。
+
+\newpage
+
+\section{实验总结}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  通过本次实验，我实现了MLP, Text CNN,
+  LSTM等文本处理模型，实现了文本的多分类任务，对神经网络的工作机制有了更深的理解，对F1-Score, Correlation Coefficient等评价指标更加熟悉。
+\item
+  通过调参实验培养了耐心和毅力，同时领悟了不少调参的经验，例如事先预估可训练参数的数量、通过dropout防止过拟合、通过调整learning
+  rate实现精细调整等等，这些经验有效地提升了模型效果，其中双向LSTM效果最佳，准确率达到了63.42\%。
+\item
+  感谢助教的耐心指导！
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,128 @@
+% （钢管下料）某钢管零售商从钢管厂进货，将钢管按照顾客的要求切割后售出。从钢管厂进货时得到的原料钢管长度都是 1850 毫米。现有一客 户需要 15 根 290 毫米长、 28 根 315 毫米长、 21 根 350 毫米长和 30 根 455 毫米长的钢管。为了简化生产过程，规定所使用的切割模式的种类不能超过 4 种，使用频率最高的一种切割模式按照一根原料钢管价值的 1/10 增加费用，使用频率次之的切割模式按照一根原料钢管价值的 2/10 增加费用，依次类推，且每种切割模式下的切割次数不能太多（一根原料钢管最多生产 5 根产品）。此外，为了减少余料浪费，每种切割模式下的余料浪费不能超过 100 毫米。为了使总费用最小，应如何下料。
+
+\subsubsection{问题分析}
+
+题目设置了一个钢管生产场景，给出了原料钢管的长度，不同长度钢管的需求量，切割模式的成本，切割钢管的数量限制，需要确定最优生产方案，使得总费用最小。题目构成了一个钢管下料问题，这是一个经典的整数规划问题。
+
+\subsubsection{模型假设}
+
+为了简化实际情况，模型基于以下假设，
+\begin{enumerate}
+    \item 切割过程中没有物料损失，能够精准控制钢管长度，不产生次品。
+    \item 生产余料的价值为零。
+    \item 没有仓储和运输费用。
+\end{enumerate}
+
+\subsubsection{模型建立}
+
+设用户需要$m$种规格的钢管，第$i$种规格的钢管长度为$d_i$，需求量为$c_i$，设一共采用$n$种切割模式，在第$j$种切割模式下，每根原料钢管的处理成本为$p_j$，共切割$x_j$根原料钢管，生产长度为$d_i$的钢管数量为$r_{ij}$，其中$i=1,2,\cdots,m$，$j=1,2,\cdots,n$。记原料钢管长度为$Q$，每种切割模式下余料的最大长度为$q$，每根原料钢管最多生产$k$根产品。
+
+为方便叙述，记钢管长度向量$\mathbf{d} = (d_1,\cdots,d_m)$，需求向量$\mathbf{c} = (c_1,\cdots,c_m)$，生产矩阵$\mathbf{R} = (r_{ij})_{m \times n}$，原料消耗向量$\mathbf{x} = (x_1, \cdots, x_n)$，成本系数向量$\mathbf{p} = (p_1,\cdots,p_n)$。
+
+为了使切割模式与价格对应，这里指定大小顺序为，
+\begin{equation}\label{eq:ex11_cons_order}
+    x_{j+1} \le x_j, \quad j=1,2,\cdots,n-1
+\end{equation}
+
+生产需要满足客户需求，注意这里的$\ge$符号表示按分量比较，
+\begin{equation}\label{eq:ex11_cons_demand}
+    \mathbf{Rx} \ge \mathbf{c}
+\end{equation}
+
+一根原料钢管最多生产$k$根产品，
+\begin{equation}
+    \sum_{i=1}^m r_{ij} \le k, \quad j=1,2,\cdots,n
+\end{equation}
+
+不同切割模式下需要满足余料限制，
+\begin{equation}\label{eq:ex11_cons_remain}
+    Q - q \le \mathbf{R}^T \mathbf{d} \le Q
+\end{equation}
+
+再加上非负整数约束，
+\begin{equation}\label{eq:ex11_cons_int}
+    \mathbf{x} \in \mathbb{N}^{m}, \quad \mathbf{R} \in \mathbb{N}^{m \times n}
+\end{equation}
+
+在此基础上，设每根原料钢管的采购成本为单位成本，需要最小化生产总费用$f$，
+\begin{equation}\label{eq:ex11_objective}
+    \min f = \mathbf{px}
+\end{equation}
+
+这是一个整数规划模型，目标函数为\Cref{eq:ex11_objective}，决策变量为$\mathbf{R}$和$\mathbf{x}$，在约束条件\Cref{eq:ex11_cons_order}，\Cref{eq:ex11_cons_demand}，\Cref{eq:ex11_cons_remain}和\Cref{eq:ex11_cons_int}。
+
+\subsubsection{算法设计}
+
+对于整数规划，可以采用LINGO软件求解，需要使用\texttt{@gin}命令将决策变量限制在整数域内。
+
+\subsubsection{程序}
+
+请参见附录\ref{sec:ex11_code}。
+
+\subsubsection{计算结果}
+
+LINGO将该问题识别为PIQP (Pure Integer Quadratic Program)，经过3,500,150次迭代，求得全局最优解，总费用$f$的最小值为21.5倍单位成本，决策变量$\mathbf{R}$和$\mathbf{x}$的最优值为，
+\begin{equation}
+    \mathbf{R} = \left(\begin{matrix}
+        1 & 0 & 2 & 0\\
+        2 & 0 & 0 & 0\\
+        0 & 5 & 1 & 0\\
+        2 & 0 & 2 & 4
+    \end{matrix}\right)
+    ,\quad
+    \mathbf{x} = \left(\begin{matrix}
+        14\\
+        4\\
+        1\\
+        0
+    \end{matrix}\right)
+\end{equation}
+
+将上述结果进行整理，得到具体切割模式及原料钢管消耗数量，如\Cref{tab:ex11_result}所示。注意到第四种切割模式的生产量为零，因此该切割模式无意义，应当将其省略。
+
+\begin{table}[H]
+    \centering
+    \caption{具体切割模式及原料钢管消耗数量}
+    \label{tab:ex11_result}
+    \begin{tabular}{c|ccccc|c}
+        \toprule
+        & 290 mm & 315 mm & 350 mm & 455 mm & 余料 (mm) &
+        原料钢管\tabularnewline
+        \midrule
+        切割模式1 & 1 & 2 & 0 & 2 & 20 & 14\tabularnewline
+        切割模式2 & 0 & 0 & 5 & 0 & 100 & 4\tabularnewline
+        切割模式3 & 2 & 0 & 1 & 2 & 10 & 1\tabularnewline
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+\subsubsection{结果的数学分析}
+
+整数规划是一个NPC问题，在求解过程中，往往需要通过增加约束条件，使得分支定界法能够及时剪枝，从而加快求解速度。额外的约束可以根据常理人为添加，也可以通过割平面算法求得。
+
+在本题中，原料消耗量大小顺序约束\Cref{eq:ex11_cons_order}其实是不必要的，只要指定了成本系数向量$\mathbf{p}$，那么在最优解中，产量最大的切割模式必定对应最低的成本系数，否则，通过交换两种切割模式的顺序，就可以得到更低的成本。然而，如果将该约束去掉，则LINGO需要11,089,340次迭代才能求解出相同的结果，求解速度大约下降到了原来的1/4。
+
+反过来，如果增加一个约束会怎么样呢？考虑到一根1850毫米长原料钢管的余料最多为100毫米，即使全部生产最长的455毫米长钢管，也至少生产4根才能满足余料约束，因此有，
+\begin{equation}
+    \sum_{i=1}^m r_{ij} \ge 4, \quad j=1,2,\cdots,n
+\end{equation}
+
+加上这个约束后，LINGO只需要828,566次迭代就能求出同样的结果，求解速度加快到了原来的4倍，因此附录的源码也增加了这个约束。
+
+可见，在不改变最优解的情况下，约束越强，求解速度越快。
+
+\subsubsection{结果的实际意义}
+
+该计算结果具有一定的实用价值，可作为制定生产方案的重要参考。然而，该模型仍相对简单，在实际应用中，还应当综合考虑工厂的实际情况，例如原料钢管的运输费用，剩余成品的仓储成本，切割过程的物料损失，产品的次品率，余料的利用价值等因素，才能制定出合适的生产方案。
+
+\subsubsection{结论}
+
+应当使用三种切割模式。
+
+第一种切割模式处理原料钢管14根，每根原料钢管切割成1根290毫米长，2根315毫米长和2根455毫米长钢管，余料为20毫米长。
+
+第二种切割模式处理原料钢管4根，每根原料钢管切割成5根350毫米长钢管，余料为100毫米长。
+
+第三种切割模式处理原料钢管1根，每根原料钢管切割成2根290毫米长，1根350毫米长和2根455毫米长钢管，余料为10毫米长。
+
+此时总费用最小，为单根原料钢管采购成本的21.5倍。

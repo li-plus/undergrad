@@ -1,0 +1,33 @@
+model:
+
+sets:
+n4/1..4/: demand, price, len, x;
+n3/1..3/: ;
+link(n4,n4): r;
+endsets
+
+data:
+price = 1.1 1.2 1.3 1.4;
+demand = 15 28 21 30;
+len = 290 315 350 455;
+enddata
+
+[obj] min = @sum(n4: price * x);
+
+@for(n3(j):
+  [order] x(j+1) <= x(j);
+);
+
+@for(n4(i):
+  [need] @sum(n4(j): r(i,j) * x(j)) >= demand(i);
+  [max_cut] @sum(n4(j): r(j,i)) <= 5;
+  [min_cut] @sum(n4(j): r(j,i)) >= 4;
+  [min_use] @sum(n4(j): r(j,i) * len(j)) >= 1750;
+  [max_use] @sum(n4(j): r(j,i) * len(j)) <= 1850;
+  [int_x] @gin(x(i));
+  @for(n4(j):
+    [int_r] @gin(r(i, j));
+  );
+);
+
+end

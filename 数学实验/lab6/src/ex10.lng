@@ -1,0 +1,25 @@
+sets:
+n3/1..3/: aa, a, c, uu, u, dd, d, x;
+n2/1..2/: s;
+endsets
+
+data:
+uu = 1000, , ;
+u = 0.8, , ;
+aa = 5 5 5;
+a = 100 60 50;
+c = 1 1 1;
+s = 0.9 0.6;
+r = 1;
+enddata
+
+[obj] min = @sum(n3: c * aa * x);
+
+@for(n3: [range] x <= a);
+@for(n2(i): [up_flow] uu(i+1) = dd(i));
+@for(n2(i): [up_percent] u(i+1) = s(i) * d(i));
+@for(n3: [down_flow] dd = uu + aa);
+@for(n3: [down_percent] d = (uu*u + aa*(a-x)) / dd);
+
+@for(n3: [up_std] u <= r);
+@for(n3: [down_std] d <= r);

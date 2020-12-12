@@ -1,0 +1,145 @@
+% !TEX program = xelatex
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{subfigure}
+
+\usepackage{url}
+\usepackage{multirow}
+
+% for plotting 
+\usepackage{caption}
+\usepackage{pgfplots}
+
+% for pseudo code 
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% for reference 
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% for code 
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+\newfontfamily\consolas{Consolas}
+
+\usepackage{amssymb}
+\usepackage{pifont}
+\usepackage{xcolor}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\lstset {
+    basicstyle=\footnotesize\consolas, % basic font setting
+    breaklines=true, 
+    frame=single,     % {single, shadowbox, bottomline}
+    keywordstyle=\color{blue}, 
+    commentstyle=\color{darkgreen},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    % backgroundcolor=\color{black!5}, % set backgroundcolor
+    numbers=left, 
+    numberstyle=\ttfamily,
+}
+
+% Microsoft Word A4 paper default layout 
+\usepackage[a4paper, left=3.18cm, right=3.18cm, top=2.54cm, bottom=2.54cm]{geometry}
+
+% \captionsetup[figure]{labelfont={bf}, name={Figure}}
+% \captionsetup[table]{labelfont={bf}, name={Table}}
+
+\crefname{equation}{方程}{方程}
+\Crefname{equation}{方程}{方程}
+\crefname{table}{表}{表}
+\Crefname{table}{表}{表}
+\crefname{figure}{图}{图}
+\Crefname{figure}{图}{图}
+
+\title{数学实验：第八次作业}
+\author{计算机系 \quad 计73 \quad 2017011620 \quad 李家昊}
+\date{\today}
+
+% 实验报告格式的基本要求
+
+% 系别、班级、学号、姓名
+
+% 1 实验目的
+% 2 题目
+%   2.1 计算题：题号，算法设计(包括计算公式)，程序，计算结果(计算机输出)，结果分析，结论。
+%   2.2 应用题：题号，问题分析，模型假设，模型建立，算法设计(包括计算公式)，程序，计算结果(计算机输出)，结果的数学分析，结果的实际意义，结论。
+% 3 收获与建议
+
+% Calc
+% \subsubsection{算法设计}
+% \subsubsection{程序}
+% \subsubsection{计算结果}
+% \subsubsection{结果分析}
+% \subsubsection{结论}
+
+% App
+% \subsubsection{问题分析}
+% \subsubsection{模型假设}
+% \subsubsection{模型建立}
+% \subsubsection{算法设计}
+% \subsubsection{程序}
+% \subsubsection{计算结果}
+% \subsubsection{结果的数学分析}
+% \subsubsection{结果的实际意义}
+% \subsubsection{结论}
+
+\begin{document}
+
+\maketitle
+
+\section{实验目的}
+
+\begin{itemize}
+    \item 掌握概率统计的基本概念及用MATLAB实现的方法。
+    \item 用这些方法解决实际问题。
+\end{itemize}
+
+\section{问题求解}
+
+\subsection{Chap11-Ex5 炮弹问题（计算题）}
+
+\input{ex5}
+
+\subsection{Chap11-Ex7 报童问题（计算题）}
+
+\input{ex7}
+
+\subsection{Chap11-Ex9 轧钢问题（计算题）}
+
+\input{ex9}
+
+\section{收获与建议}
+
+在本次实验中，我掌握了MATLAB求解概率统计问题的方法，用概率统计方法建立了实际问题的模型，并进行求解，在解决实际问题的过程中，我对数学方法的原理和应用有了更深刻的理解。
+
+希望助教能对每次的实验进行详细的解答，希望老师在未来的课堂上介绍更多数学应用的前沿知识。
+
+\section{附录：程序代码}
+
+\subsection{Chap11-Ex5}\label{sec:ex5_code}
+
+\lstinputlisting[language=Matlab]{../src/ex5.m}
+
+\subsection{Chap11-Ex7}\label{sec:ex7_code}
+
+\lstinputlisting[language=Matlab]{../src/ex7.m}
+
+\subsection{Chap11-Ex9}\label{sec:ex9_code}
+
+\lstinputlisting[language=Matlab]{../src/ex9.m}
+
+\end{document}

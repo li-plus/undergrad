@@ -1,0 +1,32 @@
+model:
+
+sets:
+n7/1..7/: x, w, pt_mask;
+n8/1..8/: b;
+link(n7,n8): A;
+endsets
+
+data:
+b = 4 3 4 6 5 6 8 8;
+A = 1 1 1 0 1 1 1 1
+    1 1 1 1 0 1 1 1
+    1 1 1 1 0 0 0 0
+    0 1 1 1 1 0 0 0
+    0 0 1 1 1 1 0 0
+    0 0 0 1 1 1 1 0
+    0 0 0 0 1 1 1 1;
+w = 100 100 40 40 40 40 40;
+pt_mask = 0 0 1 1 1 1 1;
+enddata
+
+[obj] min = @sum(n7: w * x);
+
+@for(n8(i):
+[demand] @sum(n7(j): A(j,i) * x(j)) >= b(i);
+);
+
+@for(n7: [int] @gin(x));
+
+[parttime] @sum(n7: pt_mask * x) <= 3;
+
+end

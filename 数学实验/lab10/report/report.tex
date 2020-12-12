@@ -1,0 +1,145 @@
+% !TEX program = xelatex
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{subfigure}
+
+\usepackage{url}
+\usepackage{multirow}
+
+% for plotting 
+\usepackage{caption}
+\usepackage{pgfplots}
+
+% for pseudo code 
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% for reference 
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% for code 
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fontspec}
+\definecolor{darkgreen}{rgb}{0,0.6,0}
+\newfontfamily\consolas{Consolas}
+
+\usepackage{amssymb}
+\usepackage{pifont}
+\usepackage{xcolor}
+\newcommand{\cmark}{\ding{51}}
+\newcommand{\xmark}{\ding{55}}
+
+\lstset {
+    basicstyle=\footnotesize\consolas, % basic font setting
+    breaklines=true, 
+    frame=single,     % {single, shadowbox, bottomline}
+    keywordstyle=\color{blue}, 
+    commentstyle=\color{darkgreen},
+    stringstyle=\color{red},
+    showstringspaces=false,
+    % backgroundcolor=\color{black!5}, % set backgroundcolor
+    numbers=left, 
+    numberstyle=\ttfamily,
+}
+
+% Microsoft Word A4 paper default layout 
+\usepackage[a4paper, left=3.18cm, right=3.18cm, top=2.54cm, bottom=2.54cm]{geometry}
+
+% \captionsetup[figure]{labelfont={bf}, name={Figure}}
+% \captionsetup[table]{labelfont={bf}, name={Table}}
+
+\crefname{equation}{方程}{方程}
+\Crefname{equation}{方程}{方程}
+\crefname{table}{表}{表}
+\Crefname{table}{表}{表}
+\crefname{figure}{图}{图}
+\Crefname{figure}{图}{图}
+
+\title{数学实验：第十次作业}
+\author{计算机系 \quad 计73 \quad 2017011620 \quad 李家昊}
+\date{\today}
+
+% 实验报告格式的基本要求
+
+% 系别、班级、学号、姓名
+
+% 1 实验目的
+% 2 题目
+%   2.1 计算题：题号，算法设计(包括计算公式)，程序，计算结果(计算机输出)，结果分析，结论。
+%   2.2 应用题：题号，问题分析，模型假设，模型建立，算法设计(包括计算公式)，程序，计算结果(计算机输出)，结果的数学分析，结果的实际意义，结论。
+% 3 收获与建议
+
+% Calc
+% \subsubsection{算法设计}
+% \subsubsection{程序}
+% \subsubsection{计算结果}
+% \subsubsection{结果分析}
+% \subsubsection{结论}
+
+% App
+% \subsubsection{问题分析}
+% \subsubsection{模型假设}
+% \subsubsection{模型建立}
+% \subsubsection{算法设计}
+% \subsubsection{程序}
+% \subsubsection{计算结果}
+% \subsubsection{结果的数学分析}
+% \subsubsection{结果的实际意义}
+% \subsubsection{结论}
+
+\begin{document}
+
+\maketitle
+
+\section{实验目的}
+
+\begin{itemize}
+    \item 了解回归分析的基本原理，掌握MATLAB实现的方法。
+    \item 练习用回归分析解决实际问题。
+\end{itemize}
+
+\section{问题求解}
+
+\subsection{Chap13-Ex7 有氧锻炼（计算题）}
+
+\input{ex7}
+
+\subsection{Chap13-Ex9 洗衣粉泡沫（计算题）}
+
+\input{ex9}
+
+\subsection{Chap13-Ex13 Logistic模型（计算题）}
+
+\input{ex13}
+
+\section{收获与建议}
+
+在本次实验中，我掌握了回归分析的基本原理，用回归分析方法建立了实际问题的模型，并用MATLAB进行求解，在解决实际问题的过程中，我对数学方法的原理和应用有了更深刻的理解。
+
+感谢老师和助教在这个学期的付出，我在这门课上收获颇丰，学到了很多应用数学的理论知识，掌握了用数学建模解决实际问题的基本方法，也锻炼了编程实践的能力。在以后的课程中，希望助教能对每次的实验进行详细的解答，希望老师在课堂上介绍更多数学应用的前沿知识。
+
+\section{附录：程序代码}
+
+\subsection{Chap13-Ex7}\label{sec:ex7_code}
+
+\lstinputlisting[language=Matlab]{../src/ex7.m}
+
+\subsection{Chap13-Ex9}\label{sec:ex9_code}
+
+\lstinputlisting[language=Matlab]{../src/ex9.m}
+
+\subsection{Chap13-Ex13}\label{sec:ex13_code}
+
+\lstinputlisting[language=Matlab]{../src/ex13.m}
+
+\end{document}

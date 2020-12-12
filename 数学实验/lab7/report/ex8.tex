@@ -1,0 +1,129 @@
+% 8. 某储蓄所每天的营业时间是上午9 时到下午5 时。根据经验，每天不同时间段所需要的服务员数量如表10.7。
+% 时间段（时） 9~10 10~11 11~12 12~1 1~2 2~3 3~4 4~5
+% 服务员数量 4 3 4 6 5 6 8 8
+% 储蓄所可以雇佣全时和半时两类服务员。全时服务员每天报酬100 元，从上午9 时到下午5 时工作，但中午12 时到下午2 时之间必须安排1 小时的午餐时间。储蓄所每天可以雇佣不超过3名的半时服务员，每个半时服务员必须连续工作4 小时，报酬40 元。问该储蓄所应如何雇佣全时和半时两类服务员。如果不能雇佣半时服务员，每天至少增加多少费用。如果雇佣半时服务员的数量没有限制，每天可以减少多少费用。
+
+\subsubsection{问题分析}
+
+题目给定储蓄所各时段的服务员数量要求，全时服务员和半时服务员的每日报酬和工作时间，需要确定聘用方案，这是一个整数规划问题。
+
+\subsubsection{模型假设}
+
+为了简化实际情况，模型基于以下假设，
+\begin{enumerate}
+    \item 总收益与服务员数量无关。
+    \item 各时段的人流分布稳定，未来的人流分布与经验数据相差不大。
+\end{enumerate}
+
+\subsubsection{模型建立}
+
+\paragraph{半时服务员不超过3名时} 在全时服务员中，设12时到1时午餐的人数为$x_1$，1时到2时午餐的人数为$x_2$，在半时服务员中，设9时到1时工作的人数为$y_1$，10时到2时工作的人数为$y_2$，11时到3时工作的人数为$y_3$，12时到4时工作的人数为$y_4$，1时到5时工作的人数为$y_5$，则各种服务员在各时段的工作时间表如\Cref{tab:ex8_task}所示。
+
+\begin{table}[H]
+    \centering
+    \caption{各种服务员在各时段的工作时间表}
+    \label{tab:ex8_task}
+    \begin{tabular}{c|cccccccc}
+        \toprule
+        & $9\sim 10$ & $10\sim 11$ & $11\sim 12$ & $12\sim 1$ & $1\sim 2$ & $2\sim 3$ & $3\sim 4$ & $4\sim 5$\tabularnewline
+        \midrule
+        \(x_1\) & \cmark & \cmark &
+        \cmark & & \cmark & \cmark
+        & \cmark & \cmark\tabularnewline
+        \(x_2\) & \cmark & \cmark &
+        \cmark & \cmark & & \cmark
+        & \cmark & \cmark\tabularnewline
+        \(y_1\) & \cmark & \cmark &
+        \cmark & \cmark & & & &\tabularnewline
+        \(y_2\) & & \cmark & \cmark &
+        \cmark & \cmark & & &\tabularnewline
+        \(y_3\) & & & \cmark & \cmark &
+        \cmark & \cmark & &\tabularnewline
+        \(y_4\) & & & & \cmark & \cmark &
+        \cmark & \cmark &\tabularnewline
+        \(y_5\) & & & & & \cmark & \cmark &
+        \cmark & \cmark\tabularnewline
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+将工作时间表记为矩阵$\mathbf{A} \in \mathbb{R}^{7 \times 8}$，其中符号{\cmark}对应数值1，空白位置对应数值0。记各种服务员的聘用人数为$\mathbf{x} = (x_1, x_2, y_1, y_2, y_3, y_4, y_5)^T$，各时段服务员需求量为$\mathbf{b} = (4, 3, 4, 6, 5, 6, 8, 8)^T$，则需求量约束可表示如下，注意这里的$\ge$符号表示按分量比较，
+\begin{equation}\label{eq:ex8_cons_demand}
+    \mathbf{A}^T \mathbf{x} \ge \mathbf{b}
+\end{equation}
+
+半时服务员的最大数量约束为，
+\begin{equation}\label{eq:ex8_cons_parttime}
+    \sum_{i=1}^5 y_i \le 3
+\end{equation}
+
+还需要加上非负整数约束，
+\begin{equation}\label{eq:ex8_cons_int}
+    \mathbf{x} \in \mathbb{N}^7
+\end{equation}
+
+在此基础上，需要最小化每日人力成本$f$，
+\begin{equation}\label{eq:ex8_obj}
+    \min f = 100(x_1 + x_2) + 40(y_1 + y_2 + y_3 + y_4 + y_5)
+\end{equation}
+
+这就构成了一个整数规划模型，目标函数为\Cref{eq:ex8_obj}，决策变量为$\mathbf{x}$，约束条件为\Cref{eq:ex8_cons_demand}，\Cref{eq:ex8_cons_parttime}和\Cref{eq:ex8_cons_int}。
+
+\paragraph{不能雇佣半时服务员时} 只需把半时服务员的约束条件\Cref{eq:ex8_cons_parttime}修改为，
+\begin{equation}\label{eq:ex8_cons_no_parttime}
+    y_i = 0, \quad i=1,2,3,4,5
+\end{equation}
+
+此时，目标函数为\Cref{eq:ex8_obj}，决策变量为$\mathbf{x}$，约束条件为\Cref{eq:ex8_cons_demand}，\Cref{eq:ex8_cons_no_parttime}和\Cref{eq:ex8_cons_int}。
+
+\paragraph{半时服务员数量没有限制时} 只需把半时服务员的约束条件\Cref{eq:ex8_cons_parttime}去掉即可。此时，目标函数为\Cref{eq:ex8_obj}，决策变量为$\mathbf{x}$，约束条件为\Cref{eq:ex8_cons_demand}和\Cref{eq:ex8_cons_int}。
+
+\subsubsection{算法设计}
+
+对于该整数规划模型，可采用LINGO求解，对应的LINGO模型类别为PILP (Pure Integer Linear Program)，求解方法为分支定界法 (B-and-B)。
+
+\subsubsection{程序}
+
+请参见附录\ref{sec:ex8_code}。
+
+\subsubsection{计算结果}
+
+\paragraph{半时服务员不超过3名时} LINGO经过19次迭代，求得全局最优解，得到总人力成本$f$的最小值为820元，各决策变量的最优值为，
+\begin{equation}
+    x_1 = 3, \quad x_2 = 4, \quad y_1 = 0, \quad y_2 = 2, \quad y_3 = 0, \quad y_4 = 0, \quad y_5 = 1
+\end{equation}
+
+\paragraph{不能雇佣半时服务员时} LINGO经过0次迭代，求得全局最优解，得到总人力成本$f$的最小值为1100元，各决策变量的最优值为，
+\begin{equation}
+    x_1 = 5, \quad x_2 = 6, \quad y_1 = 0, \quad y_2 = 0, \quad y_3 = 0, \quad y_4 = 0, \quad y_5 = 0
+\end{equation}
+
+此时，相比于默认情况，每天需要增加的费用为280元。
+
+\paragraph{半时服务员数量没有限制时} LINGO经过2次迭代，求得全局最优解，得到总人力成本$f$的最小值为560元，各决策变量的最优值为，
+\begin{equation}
+    x_1 = 0, \quad x_2 = 0, \quad y_1 = 6, \quad y_2 = 0, \quad y_3 = 0, \quad y_4 = 0, \quad y_5 = 8
+\end{equation}
+
+此时，相比于默认情况，每天可以减少的费用为260元。
+
+\subsubsection{结果的数学分析}
+
+从计算结果可以看出，可招聘的半时服务员的数量越多，总费用就越低，这是因为半时服务员的时薪比全时服务员更低，在合理的安排下，招聘越多半时服务员，越有利于降低总成本。
+
+此外，在本题条件下，全局最优解不唯一，例如当半时服务员不超过3名时，以下也是一个全局最优解，每日最小费用同样为820元。
+\begin{equation}
+    x_1 = 3, \quad x_2 = 4, \quad y_1 = 0, \quad y_2 = 0, \quad y_3 = 2, \quad y_4 = 0, \quad y_5 = 1
+\end{equation}
+
+\subsubsection{结果的实际意义}
+
+该计算结果具有一定的实际意义，可作为制定招聘方案的重要参考。在实际情况下，还需考虑节假日与工作日的服务员数量差异，服务人数及总收益与服务员数量的关系，以及人流分布的波动情况，根据实际情况对模型进行微调。
+
+\subsubsection{结论}
+
+半时服务员不超过3名时，储蓄所应当聘请7名全时服务员，其中3名在12时到1时午餐，另外4名在1时到2时午餐，还应当聘请3名半时服务员，其中2名在10时到2时工作，另外1名在1时到5时工作，此时每日总费用最低，为820元。
+
+不能雇佣半时服务员时，储蓄所应当聘请11名全时服务员，其中5名在12时到1时午餐，另外6名在1时到2时午餐，此时每日总费用最低，为1100元。相比于默认情况，每天需要增加的费用为280元。
+
+半时服务员数量没有限制时，储蓄所应当聘请14名半时服务员，其中6名在9时到1时工作，另外8名在1时到5时工作，此时每日总费用最低，为560元。相比于默认情况，每天可以减少的费用为260元。

@@ -1,0 +1,12 @@
+model:
+
+[obj] max = 0.48*(p+r) + 0.56*(q+s) - cost;
+
+[prop1] p >= 0.5 * (p + r);
+[prop2] q >= 0.6 * (q + s);
+[tot1] p + q <= 500 + u;
+[tot2] r + s <= 1000;
+[buy] cost = @if(u#le#500, u, @if(u#le#1000, 100+0.8*u, 300+0.6*u));
+[range] u <= 1500;
+
+end

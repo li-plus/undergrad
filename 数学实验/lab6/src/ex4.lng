@@ -1,0 +1,11 @@
+[obj] max = 9*(p+r) + 15*(q+s) - 6*x - 16*y - 10*z;
+[supply_x] x <= 500;
+[supply_y] y <= 500;
+[supply_z] z <= 500;
+[mixed_xy] w = (3*x+y) / (x+y);
+[total_mixed] p + q <= x + y;
+[total_z] r + s <= z;
+[sulphur_a] (w*p + 2*r) <= 2.5 * (p+r);
+[sulphur_b] (w*q + 2*s) <= 1.5 * (q+s);
+[demand_a] p + r <= 100;
+[demand_b] q + s <= 200;

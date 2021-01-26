@@ -1,0 +1,15 @@
+# ide
+.idea/
+.vscode/
+
+# macos
+.DS_Store
+
+# build
+/build/
+/cmake-build-debug/
+*.out
+
+# bison & flex
+lex.yy.c
+yacc.tab.[ch]

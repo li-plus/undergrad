@@ -1,0 +1,53 @@
+% !TEX program = xelatex
+% !BIB program = bibtex
+
+\documentclass[12pt,a4paper]{article}
+\usepackage[UTF8]{ctex}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{enumerate}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{subfigure}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{cleveref}
+
+% Microsoft Word A4 paper default layout 
+\usepackage[a4paper, left=3.18cm, right=3.18cm, top=2.54cm, bottom=2.54cm]{geometry}
+
+\title{数据库系统概论：第一次作业}
+\author{2017011620 计73 李家昊}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{论文阅读}
+
+阅读论文 A Relational Model of Data for Large Shared Data Banks \cite{codd2002relational}，其中提出了关系型数据库模型。
+
+\section{问题回答}
+
+\paragraph{Q1: What is the notion of data independence? Why is it important?}~{}
+
+数据独立性是指：应用程序和终端活动独立于数据类型的增长和数据表示的变化。数据独立性有利于将上层应用程序和底层数据结构解耦，构造通用型数据库，简化应用程序的编写。
+
+\paragraph{Q2: Codd spends a fair amount of time talking about "Normal forms." Why is it important that a database be stored in a normal form?}~{}
+
+数据库存储为 Normal Form，即将复杂结构转换为简单结构，使得每个域都是简单域，有利于：
+
+\begin{enumerate}
+    \item 简化数据结构，可用数组存储，无需引入指针、哈希、索引和顺序列表。
+    \item 简化数据项的名字，只需指定关系名和域名就能确定一类数据。
+    \item 开发一种通用的数据描述语言，并且一阶谓词逻辑就能满足需求。
+\end{enumerate}
+
+\bibliographystyle{plain}
+\bibliography{report}
+
+\end{document}

@@ -6,7 +6,7 @@
 
 | 时间   | 课程                                     | 内容                                                      |
 | ------ | ---------------------------------------- | --------------------------------------------------------- |
-| 2018夏 | [程序设计训练](程序设计训练)             | Qt GUI, Threading, Network Programming, Python Django     |
+| 2018夏 | [程序设计训练](程序设计训练)             | Qt GUI, Threading, Networking, Python Django              |
 | 2018秋 | [复变函数引论](复变函数引论)             | Open problems                                             |
 | 2019春 | [数字逻辑实验](数字逻辑实验)             | Digital Circuits, CPLD                                    |
 |        | [人工智能导论](人工智能导论)             | Pinyin Input, Connect4 AI, Sentiment Classification       |
@@ -25,6 +25,6 @@
 |        | [数学实验](数学实验)                     | 10 Labs                                                   |
 |        | [计算机网络专题训练](计算机网络专题训练) | 4over6 Client                                             |
 | 2020秋 | [媒体计算](媒体计算)                     | GraphCut Textures, ...                                    |
+|        | [数据库系统概论](数据库系统概论)         | Redbase (~ Stanford CS346)                                |
 |        | 网络安全工程与实践                       | 5 Labs                                                    |
-|        | 数据库系统概论                           | Redbase (~ Stanford CS346)                                |
 

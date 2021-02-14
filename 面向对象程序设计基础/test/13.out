@@ -1,0 +1,11 @@
+a       b       c       
+1       1.0000  a       
+0       2.0000  b       
+NULL    3.0000  NULL    
+3       4.0000  NULL   
+a       b       c       
+NULL    3.0000  NULL    
+3       4.0000  NULL  
+a       b       c       
+4       3.0000  NULL    
+3       4.0000  NULL 

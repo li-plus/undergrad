@@ -1,0 +1,12 @@
+Field   Type    Null    Key     Default Extra
+a       double  NO      PRI     NULL
+b       int(11) NO              NULL
+c       char(1) YES             NULL
+Tables_in_oop
+aa
+bb
+cc
+Tables_in_oop
+bb
+cc
+dd

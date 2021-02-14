@@ -1,0 +1,7 @@
+a       b       c
+a       1.0000  1
+b       NULL    2
+NULL    3.0000  3
+d       NULL    4
+COUNT(*)        COUNT(a)        COUNT(b)        COUNT(c)
+4       3       2       4

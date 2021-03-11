@@ -27,5 +27,5 @@
 |        | [计算机网络专题训练](计算机网络专题训练)     | 4over6 Client                                             |
 | 2020秋 | [媒体计算](媒体计算)                         | GraphCut Textures, ...                                    |
 |        | [数据库系统概论](数据库系统概论)             | RedBase (~ Stanford CS346)                                |
-|        | 网络安全工程与实践                           | 5 Labs                                                    |
+|        | [网络安全工程与实践](网络安全工程与实践)     | ARP spoof, DNS hijack, MITM, IPS & evasion, tunnel proxy  |
 

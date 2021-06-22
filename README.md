@@ -29,4 +29,5 @@
 |        | [数据库系统概论](数据库系统概论)             | RedBase (~ Stanford CS346)                                |
 |        | [网络安全工程与实践](网络安全工程与实践)     | ARP spoof, DNS hijack, MITM, IPS & evasion, tunnel proxy  |
 | 2020春 | [数据库专题训练](数据库专题训练)             | Transaction & Error Recovery                              |
+|        | [高性能计算导论](高性能计算导论)             | OpenMP, MPI, CUDA Programming                             |
 

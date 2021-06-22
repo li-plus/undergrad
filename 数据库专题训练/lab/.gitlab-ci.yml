@@ -1,0 +1,18 @@
+stages:
+  - test
+
+image: dbtrain:latest
+
+test_oj:
+  stage: test
+  only:
+    - master
+  script:
+    - >
+      git clone https://oauth2:${TEST_REPO_TOKEN}@git.tsinghua.edu.cn/dbtrain-2021/dbtrain-lab-test.git
+      ${RUNNER_TEST_WORKSPACE} 2> /dev/null
+    - cp -r src executable ${RUNNER_TEST_WORKSPACE}/
+    - |
+      CURRENT_LAB=`cat LAB.txt`
+      cd ${RUNNER_TEST_WORKSPACE}
+      CURRENT_LAB=${CURRENT_LAB} ./test.sh

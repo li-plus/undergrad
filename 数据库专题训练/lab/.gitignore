@@ -1,0 +1,37 @@
+# Setting files
+.idea
+.vscode
+
+# OS X
+.DS_Store
+
+# build files
+build
+
+# Compiled Object files
+*.o
+*.obj
+*.slo
+*.lo
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.la
+*.lai
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# DB files
+*.db
+
+# Patch files
+*.patch

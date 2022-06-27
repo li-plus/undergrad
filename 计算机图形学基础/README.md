@@ -9,3 +9,5 @@
 + PA4: Conditional GAN
 
 大作业：真实感渲染（光线追踪）
+
++ tinypt: https://github.com/li-plus/tinypt
